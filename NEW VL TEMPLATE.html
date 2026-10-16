@@ -1,0 +1,937 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Slop Tower Defense Value List</title><style>:root{
+  --bg:linear-gradient(135deg,#8a2be2,#2979ff,#1de9b6);
+  --card:#11152a;
+  --text:#eee;
+  --muted:#aab;
+  --accent:#8a2be2;
+}
+body.dark{--bg:#050505;--card:#111;--text:#fff;--muted:#aaa;--accent:#fff}
+body.glass{--bg:linear-gradient(135deg,#141e30,#243b55);--card:#ffffff14;--text:#fff;--muted:#ccc;--accent:#00e5ff}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  background-size:400% 400%;
+  animation:bg 15s ease infinite;
+  color:var(--text);
+  background-attachment:fixed;
+}
+@keyframes bg{50%{background-position:100% 100%}}
+nav{
+  padding:16px 40px;
+  background:#0008;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  box-shadow:0 5px 0 #0003,0 12px 28px #0003;
+  border-bottom:1px solid #fff1;
+}
+nav b{font-size:18px}
+button{cursor:pointer}
+nav button{
+  background:none;
+  border:0;
+  color:var(--muted);
+  font-weight:700;
+  margin-left:15px;
+}
+section{display:none;max-width:1400px;margin:auto;padding:40px}
+section.active{display:block}
+.hero{text-align:center}
+.hero img{width:120px;border-radius:20px;box-shadow:0 9px 0 #0003,0 18px 28px #0004}
+.hero h1{
+  font-size:32px;
+  background:linear-gradient(90deg,#8a2be2,#2979ff,#1de9b6);
+  color:transparent;
+  background-clip:text;
+}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
+.card,.side{
+  background:#0006;
+  border-radius:18px;
+  padding:18px;
+  border:1px solid #fff1;
+  box-shadow:0 7px 0 #0004,0 16px 28px #0003;
+  transform:perspective(1000px) translateZ(0);
+  transition:transform .16s ease,box-shadow .16s ease;
+}
+.card:hover,.side:hover{
+  transform:perspective(1000px) rotateX(1deg) rotateY(-1deg) translateY(-3px);
+  box-shadow:0 10px 0 #0004,0 22px 34px #0004;
+}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;box-shadow:0 5px 0 #0004,0 10px 18px #0003}
+.card b{display:block;margin-top:10px}
+.muted{color:var(--muted);font-size:13px}
+.variants{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.v{
+  border:0;
+  border-radius:8px;
+  padding:7px 9px;
+  background:#fff1;
+  color:var(--text);
+  font-weight:700;
+  font-size:11px;
+  box-shadow:0 3px 0 #0003;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.v:hover{transform:translateY(-2px);box-shadow:0 5px 0 #0003}
+.v:active{transform:translateY(1px);box-shadow:0 2px 0 #0003}
+.v.active{background:var(--accent);color:#000}
+.trade{display:flex;gap:25px;flex-wrap:wrap}
+.side{flex:1;min-width:280px}
+.add{
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  padding:12px 20px;
+  font-weight:700;
+  color:#000;
+  margin-top:12px;
+  box-shadow:0 4px 0 #0004,0 8px 14px #0002;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.add:hover{transform:translateY(-2px);box-shadow:0 6px 0 #0004,0 12px 18px #0003}
+.add:active{transform:translateY(1px);box-shadow:0 2px 0 #0004}
+.entry{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#0005;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:8px;
+  position:relative;
+  box-shadow:0 4px 0 #0003;
+}
+.entry img{width:55px;height:55px;object-fit:cover;border-radius:10px;box-shadow:0 4px 0 #0004}
+.entry .val{margin-left:auto;font-weight:700}
+.overlay{position:absolute;top:3px;right:3px;background:#000b;padding:3px 5px;border-radius:5px;font-size:10px}
+.total{text-align:right;margin-top:12px;font-weight:800}
+.result{text-align:center;font-size:25px;font-weight:700;margin-top:25px;text-shadow:0 4px 10px #0005}
+.modal{position:fixed;inset:0;background:#000b;display:none;place-items:center;z-index:5}
+.modal.show{display:grid}
+.box{
+  background:#000e;
+  padding:25px;
+  border-radius:18px;
+  width:360px;
+  max-width:94vw;
+  box-shadow:0 8px 0 #0006,0 25px 50px #0008;
+  border:1px solid #fff2;
+}
+.box label{display:block;color:var(--muted);font-size:13px;margin-top:10px}
+.box select,.box input{width:100%;padding:10px;border:0;border-radius:9px;background:#222;color:#fff;margin-top:5px}
+.box .add{width:100%}
+.discord{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#5865f2;
+  color:#fff;
+  text-decoration:none;
+  padding:12px 20px;
+  border-radius:99px;
+  font-weight:700;
+  box-shadow:0 5px 0 #0005,0 10px 18px #0003;
+}
+.hide{display:none}
+.copyright{max-width:800px;margin:auto;line-height:1.8;background:#0006;padding:30px;border-radius:18px;box-shadow:0 7px 0 #0004,0 16px 28px #0003}
+.unit-card-title{font-size:18px;font-weight:900;margin:11px 0 8px}
+.unit-stats{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px solid #ffffff12}
+.unit-stat{display:flex;align-items:baseline;gap:4px;min-height:0;padding:0;background:none;border:0;box-shadow:none}
+.unit-stat-label{font-size:10px;color:var(--muted);font-weight:700}
+.unit-stat-value{font-size:13px;font-weight:850;white-space:nowrap}
+.unit-value{font-size:15px}.unit-demand{color:#f3d27a}
+.unit-stability{margin-left:auto;display:flex;align-items:center;gap:6px}
+.stability-pill{max-width:180px;min-width:72px;text-align:center;padding:4px 9px;border-radius:999px;background:#ffffff0d;border:1px solid #ffffff12;font-size:10px;font-weight:850;box-shadow:0 2px 0 #0003;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stability-pill[data-status="unstable"]{background:#ff45451f;color:#ff7777;border-color:#ff555544}
+.stability-pill[data-status="stable"]{background:#4f9cff1f;color:#86bdff;border-color:#5da9ff44}
+.stability-pill[data-status="rising"]{background:#2bd77b1f;color:#6be6a3;border-color:#39d88944}
+.stability-pill[data-status="falling"]{background:#ff9b451f;color:#ffc078;border-color:#ffad5c44}
+.stability-pill.custom-status{color:var(--custom-color);background:color-mix(in srgb,var(--custom-color) 14%,transparent);border-color:color-mix(in srgb,var(--custom-color) 35%,transparent)}
+button,.nav button,.tab{transition:transform .12s ease,box-shadow .12s ease}
+.rarity{display:inline-block;margin-top:5px;padding:3px 7px;border-radius:6px;background:#ffffff10;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.2px}.item-meta{display:flex;gap:14px;margin-top:8px;color:var(--muted);font-size:11px}.item-meta b{color:var(--text);font-size:12px;margin-left:2px}
+@media(max-width:700px){section{padding:20px}nav{padding:14px;justify-content:center}.trade{flex-direction:column}}
+@media(max-width:500px){.unit-stats{gap:8px}.unit-stability{margin-left:0;width:100%;justify-content:flex-start}}
+
+.variant, .variants, .variant-row, .variant-select, .variant-buttons, [data-variant] { display: none !important; }
+
+
+
+/* TRADE ADD PICKER — Vaulted Values inspired item picker */
+#modal.add-picker-modal{
+  background:rgba(3,4,7,.84);
+  backdrop-filter:blur(14px) saturate(120%);
+  padding:16px;
+}
+#modal.add-picker-modal .picker-shell{
+  width:min(1210px,97vw);
+  height:min(790px,94vh);
+  max-height:94vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  color:#f4f5f7;
+  background:
+    radial-gradient(800px 380px at 80% -25%,rgba(130,140,170,.09),transparent 60%),
+    linear-gradient(180deg,#11141b 0%,#0b0d12 100%);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;
+  box-shadow:0 35px 100px rgba(0,0,0,.72),0 0 0 1px rgba(0,0,0,.5);
+}
+#modal.add-picker-modal .picker-top{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:17px 18px 14px;
+  border-bottom:1px solid rgba(255,255,255,.075);
+}
+#modal.add-picker-modal .picker-icon,
+#modal.add-picker-modal .picker-close{
+  width:43px;height:43px;flex:0 0 43px;
+  display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:12px;
+  background:linear-gradient(180deg,#1b1e26,#15171e);
+  color:#e8e9ee;
+  font-family:inherit;
+  cursor:pointer;
+  box-shadow:inset 0 1px rgba(255,255,255,.05);
+}
+#modal.add-picker-modal .picker-icon:hover,
+#modal.add-picker-modal .picker-close:hover{
+  background:#20232c;
+  border-color:rgba(255,255,255,.25);
+}
+#modal.add-picker-modal .picker-close{font-size:22px}
+#modal.add-picker-modal .picker-search{
+  flex:1;min-width:0;height:43px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  outline:none;
+  padding:0 15px;
+  background:#171a21;
+  color:#fff;
+  font:600 14px Inter,Arial,sans-serif;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.4);
+}
+#modal.add-picker-modal .picker-search::placeholder{color:#767a85}
+#modal.add-picker-modal .picker-search:focus{
+  border-color:rgba(255,255,255,.36);
+  background:#191c24;
+}
+#modal.add-picker-modal .browse-view{display:flex;min-height:0;flex:1;flex-direction:column}#modal.add-picker-modal .browse-view.hide{display:none!important}#modal.add-picker-modal .picker-main{display:flex;min-height:0;flex:1}
+#modal.add-picker-modal .picker-sidebar{
+  width:225px;flex:0 0 225px;
+  padding:18px 12px;
+  overflow:auto;
+  border-right:1px solid rgba(255,255,255,.075);
+}
+#modal.add-picker-modal .picker-label{
+  margin:0 10px 10px;
+  color:#777b87;
+  font-size:10px;font-weight:900;letter-spacing:2px;
+}
+#modal.add-picker-modal .picker-cat{
+  width:100%;min-height:41px;
+  display:flex;align-items:center;justify-content:space-between;
+  margin:0 0 5px;
+  padding:9px 12px;
+  border:1px solid transparent;border-radius:10px;
+  background:transparent;color:#bfc2ca;
+  font:750 13px Inter,Arial,sans-serif;
+  cursor:pointer;
+  transition:.12s ease;
+}
+#modal.add-picker-modal .picker-cat:hover{
+  background:rgba(255,255,255,.045);
+  color:#fff;
+}
+#modal.add-picker-modal .picker-cat.active{
+  background:linear-gradient(180deg,#252831,#1c1f27);
+  border-color:rgba(255,255,255,.17);
+  color:#fff;
+  box-shadow:inset 0 1px rgba(255,255,255,.055),0 5px 14px rgba(0,0,0,.18);
+}
+#modal.add-picker-modal .cat-count{
+  color:#777b86;font-size:10px;font-weight:800;
+}
+#modal.add-picker-modal .picker-cat.active .cat-count{color:#bfc2ca}
+#modal.add-picker-modal .picker-content{display:flex;flex-direction:column;min-width:0;flex:1}
+#modal.add-picker-modal .picker-source{
+  min-height:60px;
+  display:flex;align-items:center;gap:8px;
+  padding:11px 18px;
+  border-bottom:1px solid rgba(255,255,255,.075);
+}
+#modal.add-picker-modal .picker-source span{
+  margin-right:4px;color:#777b87;font-size:10px;font-weight:900;letter-spacing:2px;
+}
+#modal.add-picker-modal .source-btn{
+  min-height:38px;
+  padding:8px 13px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:10px;
+  background:#15181f;color:#bfc2ca;
+  font:800 12px Inter,Arial,sans-serif;
+  cursor:pointer;
+  transition:.12s;
+}
+#modal.add-picker-modal .source-btn:hover{background:#1e2129;color:#fff}
+#modal.add-picker-modal .source-btn.active{
+  background:#f0f0f2;color:#111318;border-color:#f0f0f2;
+}
+#modal.add-picker-modal .picker-grid{
+  flex:1;
+  padding:18px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(125px,1fr));
+  gap:12px;
+  overflow:auto;
+  align-content:start;
+  scrollbar-width:thin;
+  scrollbar-color:#3b3f49 transparent;
+}
+#modal.add-picker-modal .picker-card{
+  min-width:0;
+  position:relative;
+  padding:8px 8px 9px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.025),transparent 32%),
+    #0b0d12;
+  color:#fff;
+  text-align:left;
+  font-family:Inter,Arial,sans-serif;
+  cursor:pointer;
+  box-shadow:inset 0 1px rgba(255,255,255,.025),0 7px 18px rgba(0,0,0,.18);
+  transition:transform .13s,border-color .13s,background .13s,box-shadow .13s;
+}
+#modal.add-picker-modal .picker-card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(255,255,255,.30);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),transparent 38%),
+    #10131a;
+  box-shadow:inset 0 1px rgba(255,255,255,.05),0 13px 26px rgba(0,0,0,.3);
+}
+#modal.add-picker-modal .picker-card:active{transform:translateY(-1px)}
+#modal.add-picker-modal .picker-card:focus-visible{
+  outline:2px solid #fff;outline-offset:2px;
+}
+#modal.add-picker-modal .picker-image-wrap{
+  position:relative;
+  width:100%;aspect-ratio:1;
+  overflow:hidden;border-radius:10px;
+  background:#06070a;
+  border:1px solid rgba(255,255,255,.06);
+}
+#modal.add-picker-modal .picker-card img{
+  width:100%;height:100%;
+  display:block;object-fit:cover;
+}
+#modal.add-picker-modal .picker-tier{
+  position:absolute;left:6px;bottom:6px;
+  padding:4px 7px;border-radius:7px;
+  background:rgba(8,9,12,.88);
+  border:1px solid rgba(255,255,255,.12);
+  color:#d9dbe1;font-size:9px;font-weight:900;
+  line-height:1;
+  backdrop-filter:blur(5px);
+}
+#modal.add-picker-modal .picker-trend{
+  position:absolute;right:6px;top:6px;
+  width:25px;height:25px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  background:rgba(8,9,12,.88);
+  border:1px solid rgba(255,255,255,.12);
+  font-size:13px;font-weight:900;
+  backdrop-filter:blur(5px);
+}
+#modal.add-picker-modal .trend-rising{color:#6be6a3}
+#modal.add-picker-modal .trend-falling{color:#ffad73}
+#modal.add-picker-modal .trend-stable{color:#9db7ff}
+#modal.add-picker-modal .picker-card-name{
+  margin:9px 3px 4px;
+  font-size:12px;font-weight:900;line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#modal.add-picker-modal .picker-card-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:5px;margin:0 3px;
+}
+#modal.add-picker-modal .picker-card-value{
+  min-width:0;color:#b5b8c1;font-size:10px;font-weight:750;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#modal.add-picker-modal .picker-card-demand{
+  color:#e0c77a;font-size:9px;font-weight:850;white-space:nowrap;
+}
+#modal.add-picker-modal .picker-empty{
+  grid-column:1/-1;text-align:center;color:#777b87;padding:75px 20px;
+}
+#modal.add-picker-modal .quantity-view{
+  display:none!important;min-height:0;flex:1;flex-direction:column;
+}
+#modal.add-picker-modal .quantity-view.show{display:flex!important}
+#modal.add-picker-modal .quantity-body{
+  width:min(690px,100%);
+  margin:auto;
+  padding:26px 24px 24px;
+  display:flex;flex-direction:column;gap:17px;
+  overflow:auto;
+}
+#modal.add-picker-modal .quantity-title{
+  margin:0 0 2px;
+  font-size:26px;font-weight:900;letter-spacing:-.6px;
+}
+#modal.add-picker-modal .selected-unit{
+  display:flex;align-items:center;gap:16px;
+  padding:13px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:15px;
+  background:linear-gradient(180deg,#181b23,#12151b);
+  box-shadow:inset 0 1px rgba(255,255,255,.04),0 10px 28px rgba(0,0,0,.25);
+}
+#modal.add-picker-modal .selected-unit img{
+  width:84px;height:84px;flex:0 0 84px;
+  object-fit:cover;border-radius:11px;
+  background:#06070a;
+  border:1px solid rgba(255,255,255,.07);
+}
+#modal.add-picker-modal .selected-name{
+  font-size:18px;font-weight:900;line-height:1.2;overflow-wrap:anywhere;
+}
+#modal.add-picker-modal .selected-rarity{
+  margin-top:6px;color:#858995;font-size:12px;font-weight:700;
+}
+#modal.add-picker-modal .selected-value{
+  margin-top:9px;color:#d7d9df;font-size:13px;font-weight:700;
+}
+#modal.add-picker-modal .quantity-label{
+  color:#777b87;font-size:10px;font-weight:900;letter-spacing:2px;
+}
+#modal.add-picker-modal .quantity-input{
+  width:100%;min-height:44px;
+  padding:11px 13px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:11px;
+  background:#171a21;color:#fff;
+  font:600 14px Inter,Arial,sans-serif;
+  outline:none;
+}
+#modal.add-picker-modal .quantity-input:focus{border-color:rgba(255,255,255,.36)}
+#modal.add-picker-modal .quantity-slider{
+  width:100%;height:5px;accent-color:#f0f0f2;cursor:pointer;
+}
+#modal.add-picker-modal .quantity-help{
+  margin-top:-7px;color:#7f838e;font-size:12px;line-height:1.5;
+}
+#modal.add-picker-modal .quantity-actions{
+  display:flex;justify-content:flex-end;gap:9px;
+  padding:15px 24px;
+  border-top:1px solid rgba(255,255,255,.075);
+  background:rgba(8,9,12,.58);
+}
+#modal.add-picker-modal .picker-btn{
+  min-height:42px;
+  padding:10px 16px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:11px;
+  background:#171a21;color:#fff;
+  font:850 12px Inter,Arial,sans-serif;
+  cursor:pointer;
+}
+#modal.add-picker-modal .picker-btn:hover{background:#20232b;border-color:rgba(255,255,255,.25)}
+#modal.add-picker-modal .picker-btn.primary{background:#f0f0f2;color:#111318;border-color:#f0f0f2}
+#modal.add-picker-modal .picker-btn.primary:hover{background:#fff}
+#modal.add-picker-modal .hide{display:none!important}
+@media(max-width:980px){
+  #modal.add-picker-modal .picker-grid{grid-template-columns:repeat(4,minmax(110px,1fr))}
+}
+@media(max-width:740px){
+  #modal.add-picker-modal{padding:6px}
+  #modal.add-picker-modal .picker-shell{width:99vw;height:95vh;border-radius:16px}
+  #modal.add-picker-modal .picker-sidebar{display:none}
+  #modal.add-picker-modal .picker-grid{grid-template-columns:repeat(3,minmax(92px,1fr));padding:12px;gap:9px}
+}
+@media(max-width:480px){
+  #modal.add-picker-modal .picker-grid{grid-template-columns:repeat(2,minmax(100px,1fr))}
+  #modal.add-picker-modal .picker-top{padding:11px}
+  #modal.add-picker-modal .quantity-body{padding:20px 14px}
+  #modal.add-picker-modal .quantity-actions{padding:12px 14px}
+}
+</style></head><body>
+<nav><b>Slop Tower Defense Value List</b><div><button onclick="show('home')">Home</button><button onclick="show('values')">Value List</button><button onclick="show('trade')">Trade Calculator</button><button onclick="show('credits')">Credits</button><button onclick="show('copyright')">Copyright</button><button onclick="openSettings()">⚙️</button></div></nav>
+<section id="home" class="active"><div class="hero"><img src="logo.png" alt="logo"><h1>Welcome to Slop Tower Defense Value List</h1><p>Check values, trade smart, win more!</p><p class="muted">⚠️ If value is 0, it means O/C or N/A.</p><p>1 value = 1 slopbuck 💵💔</p></div></section>
+<section id="values"><h2>Tower Values</h2><div class="grid" id="unitGrid"></div><h2>Item Values</h2><div class="grid" id="itemGrid"></div></section>
+<section id="trade"><div class="trade"><div class="side" id="you"><h3>Your Offer</h3><div class="list"></div><button class="add" onclick="openModal('you')">＋ Add Tower / Item</button><div class="total">Total: <span id="yt">0.00</span></div></div><div class="side" id="them"><h3>Their Offer</h3><div class="list"></div><button class="add" onclick="openModal('them')">＋ Add Tower / Item</button><div class="total">Total: <span id="tt">0.00</span></div></div></div><div class="result" id="res">Fair 🤝</div></section>
+<section id="credits"><h2>Credits</h2><div class="grid"><div class="card"><img src="placeholder.png"><b>Notatroll</b><span class="muted">Created the whole site, coded all the logic, and designed the site.</span></div><div class="card"><img src="placeholder.png"><b>Sin Vida</b><span class="muted">Owner of the page and helped a TON with the values.</span></div></div></section>
+<section id="copyright"><div class="copyright"><h2>📄 Copyright</h2><p>I made this site myself. The code, design, layout, and site logic belongs to <b>notatroll</b> (Discord: <b>realnotatrollyt</b>), except third-party/game values and supplied assets.</p><p>Please don't copy, steal, or repost the website/code without permission.</p></div></section>
+<div class="modal add-picker-modal" id="modal">
+  <div class="picker-shell" role="dialog" aria-modal="true" aria-label="Add tower or item">
+    <div class="browse-view" id="browseView">
+      <div class="picker-top">
+        <button type="button" class="picker-icon" id="pickerBack" title="Back">▦</button>
+        <input class="picker-search" id="pickerSearch" type="search" placeholder="Search Slop Tower Defense items">
+        <button type="button" class="picker-close" id="pickerClose" title="Close">×</button>
+      </div>
+      <div class="picker-main">
+        <aside class="picker-sidebar">
+          <div class="picker-label">CATEGORIES</div>
+          <div id="pickerCategories"></div>
+        </aside>
+        <div class="picker-content">
+          <div class="picker-source">
+            <span>SOURCE</span>
+            <button type="button" class="source-btn active" id="towerSource">♙ Towers</button>
+            <button type="button" class="source-btn" id="itemSource">▣ Items</button>
+          </div>
+          <div class="picker-grid" id="pickerGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quantity-view" id="quantityView">
+      <div class="picker-top">
+        <button type="button" class="picker-icon" id="quantityBack" title="Back to all items">←</button>
+        <div style="flex:1;font-weight:850;font-size:15px">ITEM SETTINGS</div>
+        <button type="button" class="picker-close" id="quantityClose" title="Close">×</button>
+      </div>
+      <form id="quantityForm" class="quantity-body">
+        <div class="quantity-title">How many items?</div>
+        <div class="selected-unit">
+          <img id="selectedImg" src="placeholder.png" alt="">
+          <div style="min-width:0">
+            <div class="selected-name" id="selectedName">Item</div>
+            <div class="selected-rarity" id="selectedRarity">Unspecified</div>
+            <div class="selected-value">Value: <span id="selectedValue">0</span></div>
+          </div>
+        </div>
+        <div class="quantity-label">QUANTITY</div>
+        <input class="quantity-input" id="amt" type="number" min="1" max="999999" value="1" inputmode="numeric">
+        <input class="quantity-slider" id="quantitySlider" type="range" min="1" max="100" value="1">
+        <div class="quantity-help">The slider is tuned to move more gently at the low end, so small quantities are easier to dial in.</div>
+        <div class="quantity-label" id="variantLabel">VARIANT</div>
+        <select class="quantity-input" id="variant"></select>
+        <button type="submit" hidden></button>
+      </form>
+      <div class="quantity-actions">
+        <button type="button" class="picker-btn" id="quantityCancel">Back to all items</button>
+        <button type="button" class="picker-btn primary" id="quantityAdd">Add item</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="settings"><div class="box"><h3>⚙️ Settings</h3><label>Theme</label><select id="theme"><option value="colorful">Colorful</option><option value="dark">Dark</option><option value="glass">Glass</option></select><button class="add" onclick="saveTheme()">Save</button></div></div>
+<a class="discord" id="discord" href="#">Join our Discord</a>
+<script>
+const Units = [
+  {
+    name: 'Guest 666',
+    img: 'image',
+    rarity: 'Exclusive',
+    base: 2750,
+    demand: '4',
+    stability: 'slowly increasing'
+  },
+  {
+    name: 'Alien 1x1x1x1',
+    img: 'Alien 1x4',
+    rarity: 'Placeholder',
+    base: 500,
+    demand: '6',
+    stability: 'Stable'
+  },
+  { name: 'Patriot TV Man', img: 'Patriot Tv Man', rarity: 'Exclusive', base: 0, valueNote: 'O/C', demand: '4', stability: 'Stable' },
+  
+  { name: 'Party Toilet', img: 'Party Toilet', rarity: 'Exclusive', base: 0, valueNote: '1500', demand: '3', stability: 'Stable' },
+  
+  { name: 'Party Cat', img: 'Party Cat', rarity: 'Exclusive', base: 0, valueNote: '10000-15000', demand: '5', stability: 'Stable' },
+  
+  { name: 'Upgraded Titan Clockman', img: 'upgraded titan clockman', rarity: 'Celestial', base: 0 , valueNote: '7000', demand: '8', shinyExist: '0', voidExist: '0', stability: 'Unstable' },
+  { name: 'Upgraded Titan TV Man', img: 'uttvm', rarity: 'Secret', base: 7000, demand: '6', stability: 'Unstable' },
+  { name: 'Teapot 1x1x1x1', img: 'Teapot', rarity: 'Exclusive', base: 6000, demand: '4', exist: '5+', stability: 'Increasing' },
+  { name: 'Corgi Poseidon', img: 'Poseidon Corgi', rarity: 'Secret', base: 5700, demand: '8', stability: 'Slowly Decrease' },
+  { name: 'Star Fruit', img: 'Star Fruit', rarity: 'Exclusive', base: 4500, demand: '10', stability: 'Decreasing', status: '' },
+  
+  { name: 'Soul Fruit', img: 'Soul Fruit', rarity: 'Secret', base: 5000, demand: '8',  stability: 'Slowly Decreasing', status: '' },
+  
+  
+  { name: 'Caine', img: 'Caine', rarity: 'Celestial', base: 4300, demand: '6',  stability: 'Slow Decrease', status: 'Underpaid' },
+  { name: 'True Final Boss', img: 'trueohioman', rarity: 'Secret', base: 4100, demand: '5',  stability: 'Slow Decrease', status: 'Underpaid' },
+  { name: 'Watchman of Doom', img: 'WOD', rarity: 'Hero', base: 2500, demand: '10',  stability: 'Going Down Critically', status: 'Overpaid' },
+  { name: 'Orbital Camara', img: 'Orbital camara', rarity: 'Secret', base: 3000, demand: '7', stability: 'Decreasing', status: 'Underpaid' },
+  { name: 'Drako', img: 'hala', rarity: 'Hero', base: 2300, demand: '?', stability: 'Going Down Critically' },
+  { name: 'Toilet-Gman', img: 'G', rarity: 'Hero', base: 2100, demand: '6', stability: 'Going Down Critically' },
+  { name: 'King Noobini', img: 'King Noobini', rarity: 'Hero', base: 2000, demand: '7', stability: 'Going Down Critically' },
+  { name: 'Upgraded Slop Man', img: 'Upgraded Slop', rarity: 'Exclusive', base: 2500, demand: '5?', stability: 'Stable' },
+  { name: 'Moon Blossom', img: 'Moon Blossom', rarity: 'Godly', base: 1900, demand: '9', stability: 'Stable' },
+  { name: 'Party Toilet', img: 'Party Toilet', rarity: 'Exclusive', base: 0, valueNote: '1500', demand: '3', stability: 'Stable' },
+  { name: 'Executioner Speakerman', img: 'Executioner', rarity: 'Secret', base: 1300, demand: '7', stability: 'Stable' },
+  { name: 'Injured Titan Camara Man', img: 'Injured UTC', rarity: 'Godly', base: 1400, demand: '3', stability: 'Stable' },
+  { name: 'Titanic Cyborg Cat', img: 'Titanic Cat', rarity: 'Secret', base: 1200, demand: '7', stability: 'Stable' },
+  { name: 'Cherry Blossom', img: 'Cherry', rarity: 'Exclusive', base: 1150, demand: '7', stability: 'Stable' },
+  { name: 'Kinger', img: 'Kinger', rarity: 'Exclsuive', base: 700, demand: '5', stability: 'Stable' },
+  { name: 'Candy Blossom', img: 'Candy Blossom', rarity: 'Exclusive', base: 600, demand: '6', stability: 'Increasing' },
+  { name: 'Silly Noob', img: 'Silly Noob', rarity: 'Celestial', base: 500, demand: '7', stability: 'Decreasing' },
+  { name: 'Stalker', img: 'Stalker', rarity: 'Celestial', base: 450, demand: '7', stability: 'Decreasing' },
+  { name: 'Astral Axolot', img: 'Axolot', rarity: 'Secret', base: 300, demand: '6', stability: 'Unstable' },
+  { name: 'Tung Tung God', img: 'Tung God', rarity: 'Secret', base: 250, demand: '5', stability: 'Unstable' },
+  { name: 'Future Large Clockman', img: 'Future Clockman', rarity: 'Godly', base: 300, demand: '5', stability: 'Stable' },
+  { name: 'Huge Cyborg Cat', img: 'huge_cyborg_cat', rarity: 'Godly', base: 350, demand: '4', stability: 'Stable' },
+  { name: 'Summer Titan Camara Man', img: 'Summer UTC', rarity: 'Godly', base: 300, demand: '6', stability: 'Unstable' },
+  { name: 'Alien Gubby', img: 'Alien Gubby', rarity: 'Exclusive', base: 300, demand: '4', stability: 'Unstable' },
+  { name: 'Titan Clockman', img: 'Titan Clock', rarity: 'Exclusive', base: 250, demand: '8', stability: 'Stable' },
+  { name: 'Ban Ban Sahur', img: 'Ban Ban Sahur', rarity: 'Exclusive', base: 200, demand: '6', stability: 'Unstable' },
+  { name: 'Laser Toilet', img: 'Laser Toilet', rarity: 'Exclusive', base: 200, demand: '6', stability: 'Unstable' },
+  { name: 'Golden Slop Man', img: 'Golden Slop', rarity: 'Exclsuive', base: 200, demand: '5', stability: 'Stable' },
+  { name: 'Forsakend Jane Doe', img: 'Forsakend Jane', rarity: 'Exclusive', base: 170, demand: '3', stability: 'Stable' },
+  { name: 'Blimp Dragon', img: 'Blimp Dragon', rarity: 'Exclusive', base: 150, demand: '3', stability: 'Stable' },
+  { name: 'Pirate TV Man', img: 'Pirate Tv Man', rarity: 'Exclusive', base: 150, demand: '5', stability: 'Stable' },
+  { name: 'Abstracted', img: 'Abstract', rarity: 'Exclusive', base: 125, demand: '3', stability: 'Stable' },
+  { name: 'Upgraded Titan Camara Man', img: 'upgraded_titan_camara_man', rarity: 'Godly', base: 100, demand: '6', stability: 'Stable' },
+  { name: 'Secret Lucky Block', img: 'Secret Lukcy Block', rarity: 'Secret', base: 100, demand: '5', exist: '100+', stability: 'Stable' },
+  { name: 'Noli', img: 'noli', rarity: 'Godly', base: 70, demand: '5', stability: 'Stable' },
+  { name: 'UTS', img: 'uts', rarity: 'Godly', base: 75, demand: '7', stability: 'Stable' },
+  { name: 'Issac9', img: 'ISSAC09', rarity: 'Godly', base: 60, demand: '5', stability: 'Stable' },
+  { name: 'Azure', img: 'Azure', rarity: 'Godly', base: 55, demand: '5', stability: 'Stable' },
+  { name: 'Ember Lily', img: 'Ember lily', rarity: 'Godly', base: 100, demand: '6', stability: 'Stable' },
+  { name: 'Sahur Statue', img: 'Sahur statue', rarity: 'Godly', base: 90, demand: '6', stability: 'Stable' },
+  { name: 'Milestone Chance', img: 'Milestone Chance', rarity: 'Exclusive', base: 87, demand: '4', stability: 'Stable' },
+  { name: 'Chance', img: 'Chance', rarity: 'Exclusive', base: 77, demand: '3', stability: 'Stable' },
+  { name: 'Tung Midas', img: 'tung_midas', rarity: 'Exclusive', base: 50, demand: '4', stability: 'Stable' },
+  { name: 'Gubbity', img: 'Gubity', rarity: 'Exclusive', base: 120, demand: '3', stability: 'Stable' },
+  { name: 'John Doe', img: 'john_doe', rarity: 'Exclusive', base: 90, demand: '4', stability: 'Stable' },
+  { name: '1x4', img: '1x4', rarity: 'Exclusive', base: 100, demand: '5', stability: 'Stable' },
+  { name: 'Issac09', img: 'ISSAC9', rarity: 'Exclusive', base: 30, demand: '2', stability: 'Stable' },
+  { name: 'Jane Doe', img: 'jane_doe', rarity: 'Exclusive', base: 120, demand: '3', stability: 'Stable' },
+  { name: 'Mini Gun Toilet', img: 'mini_gun_toilet', rarity: 'Exclusive', base: 100, demand: '5', stability: 'Stable' },
+  { name: 'Slop Man', img: 'slop_man', rarity: 'Exclusive', base: 40, demand: '3', stability: 'Stable' },
+  { name: 'Graipus Medusi', img: 'Graipus', rarity: 'Exclusive', base: 20, demand: '2', stability: 'Stable' },
+  { name: 'Dragon Canneloni', img: 'Dragon Canneloni', rarity: 'Exclusive', base: 40, demand: '2', stability: 'Stable' },
+  { name: 'Glistening Units', img: 'glistening_units', rarity: 'Exclusive', base: 10, demand: '1', stability: 'Stable' },
+  { name: 'Pot Hotspot', img: 'pot_hotspot', rarity: 'Exclusive', base: 10, demand: '0', stability: 'Stable' },
+  { name: 'Jax', img: 'jax', rarity: 'Exclusive', base: 30, demand: '2', stability: 'Stable' },
+  { name: 'Dandy', img: 'dandy', rarity: 'Exclusive', base: 40, demand: '2', stability: 'Stable' },
+  { name: 'Two Time', img: 'two_time', rarity: 'Exclusive', base: 20, demand: '3', stability: 'Stable' },
+
+  
+
+  { name: 'Showcase', img: 'placeholder', rarity: 'Showcase', base: 0, demand: '0', exist: 0, shinyExist: 0, voidExist: 0, stability: 'Stable', signedValue: 0, shinyValue: 0, voidValue: 0, shinySignedValue: 0, voidSignedValue: 0, hidden: true }
+];
+const Items = [
+  { name: 'Showcase', img: 'placeholder', rarity: 'Showcase', base: 0, demand: '0', exist: 0, stability: 'Stable', hidden: true }
+];
+const variants = {
+  normal: { name: 'Normal', key: 'base' },
+  shiny: { name: 'Shiny', key: 'shinyValue' },
+  void: { name: 'Void', key: 'voidValue' },
+  signed: { name: 'Signed', key: 'signedValue' },
+  shinySigned: { name: 'Shiny + Signed', key: 'shinySignedValue' },
+  voidSigned: { name: 'Void + Signed', key: 'voidSignedValue' }
+};
+let side='you';
+const $=id=>document.getElementById(id);
+function imgSrc(x) {
+  return (x.img || 'placeholder') + '.png';
+}
+function safe(img){if(!img)return;img.onerror=()=>{if(img.dataset.fallback!=='1'){img.dataset.fallback='1';img.src='placeholder.png'}else{img.onerror=null;img.src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#090b10"/><text x="100" y="105" fill="#777" text-anchor="middle" font-family="Arial" font-size="16">NO IMAGE</text></svg>')}}}
+function modes(u) {
+  return ['normal', 'shiny', 'void', 'signed', 'shinySigned', 'voidSigned'];
+}
+function getStabilityStyle(status){
+  const name=String(status||'Unknown').trim();
+  const key=name.toLowerCase();
+  if(key==='unstable') return {className:'',style:''};
+  if(key==='stable') return {className:'',style:''};
+  if(key==='rising') return {className:'',style:''};
+  if(key==='falling') return {className:'',style:''};
+
+  const storageKey='utd_custom_stability_colors';
+  let colors={};
+  try{colors=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){colors={}}
+  if(!colors[key]){
+    const r=Math.floor(Math.random()*256);
+    const g=Math.floor(Math.random()*256);
+    const b=Math.floor(Math.random()*256);
+    colors[key]=`rgb(${r}, ${g}, ${b})`;
+    try{localStorage.setItem(storageKey,JSON.stringify(colors))}catch(e){}
+  }
+  return {className:'custom-status',style:`--custom-color:${colors[key]}`};
+}
+
+const HIDE_VARIANTS = true;
+
+function render(){
+  $('unitGrid').innerHTML='';
+
+  Units.filter(u=>!u.hidden).forEach(u=>{
+    const c=document.createElement('div');
+    c.className='card';
+    const ms=modes(u);
+    const stability=String(u.stability||'Unknown').trim();
+    const stabilityStyle=getStabilityStyle(stability);
+
+    c.innerHTML=`
+      <img src="${imgSrc(u)}" alt="${u.name}">
+      <div class="unit-card-title">${u.name}</div><span class="rarity">${u.rarity || 'Unspecified'}</span>
+      <div class="variants">
+        ${ms.map(m=>`
+          <button class="v ${m==='normal'?'active':''}" data-m="${m}">
+            ${variants[m].name}
+          </button>
+        `).join('')}
+      </div>
+      <div class="unit-stats">
+        <div class="unit-stat">
+          <span class="unit-stat-label">Value</span>
+          <span class="unit-stat-value unit-value shown">${u.valueNote ?? ((Number.isFinite(Number(u.base)) ? Number(u.base) : 0).toFixed(2))}</span>
+        </div>
+        <div class="unit-stat">
+          <span class="unit-stat-label">Demand</span>
+          <span class="unit-stat-value unit-demand">${u.demand ?? 0}/10</span>
+        </div>
+        <div class="unit-stat unit-stability">
+          <span class="unit-stat-label">Stability</span>
+          <span class="stability-pill ${stabilityStyle.className}" data-status="${stability.toLowerCase()}" style="${stabilityStyle.style}">${stability}</span>
+        </div>
+      </div>
+    `;
+
+    safe(c.querySelector('img'));
+    const value=c.querySelector('.shown');
+
+    c.querySelectorAll('.v').forEach(button=>{
+      button.onclick=()=>{
+        c.querySelectorAll('.v').forEach(x=>x.classList.remove('active'));
+        button.classList.add('active');
+        const mode=button.dataset.m;
+        value.textContent=mode==='normal' && u.valueNote ? u.valueNote : (+u[variants[mode].key]||0).toFixed(2);
+      };
+    });
+
+    $('unitGrid').append(c);
+  });
+
+  $('itemGrid').innerHTML='';
+  Items.filter(x=>!x.hidden).forEach(x=>{
+    const c=document.createElement('div');
+    c.className='card';
+    c.innerHTML=`
+      <img src="${imgSrc(x)}" alt="${x.name}">
+      <b>${x.name}</b><span class="rarity">${x.rarity || 'Unspecified'}</span>
+      <div class="item-meta"><span>Value <b>${(+x.base||0).toFixed(2)}</b></span><span>Demand <b>${x.demand||0}/10</b></span></div>
+    `;
+    safe(c.querySelector('img'));
+    $('itemGrid').append(c);
+  });
+}
+let pickerType='tower', pickerCategory='All', pickerSearchTerm='', selectedTradeUnit=null;
+
+function pickerValue(u){
+  if(!u)return 0;
+  if(u.valueNote){
+    const nums=String(u.valueNote).replace(/,/g,'').match(/[\d.]+/g);
+    if(nums && nums.length)return (Number(nums[0])+Number(nums[nums.length-1]))/2;
+  }
+  const n=Number(u.base);
+  return Number.isFinite(n)?n:0;
+}
+function pickerDisplayValue(u){
+  if(u?.valueNote)return u.valueNote;
+  const n=Number(u?.base);
+  return Number.isFinite(n)?n.toLocaleString(): 'N/A';
+}
+function pickerTier(u){
+  const v=pickerValue(u);
+  if(v>=5000)return 'High Value';
+  if(v>=2000)return 'Okay Value';
+  return 'Low Value';
+}
+function pickerTrend(u){
+  const s=String(u?.stability||'').toLowerCase();
+  if(/rising|increas|increasing|up/.test(s))return 'Rising';
+  if(/fall|decreas|decreasing|down/.test(s))return 'Falling';
+  return 'Stable';
+}
+function pickerTrendIcon(t){
+  return t==='Rising'?'↗':t==='Falling'?'↘':'→';
+}
+function pickerCategories(){
+  const list=(pickerType==='item'?Items:Units).filter(x=>!x.hidden);
+  const defs=[
+    ['All',()=>true],
+    ['High Value',x=>pickerTier(x)==='High Value'],
+    ['Okay Value',x=>pickerTier(x)==='Okay Value'],
+    ['Low Value',x=>pickerTier(x)==='Low Value'],
+    ['Rising',x=>pickerTrend(x)==='Rising'],
+    ['Stable',x=>pickerTrend(x)==='Stable'],
+    ['Falling',x=>pickerTrend(x)==='Falling']
+  ];
+  $('pickerCategories').innerHTML=defs.map(([name,fn])=>{
+    const count=list.filter(fn).length;
+    return `<button type="button" class="picker-cat ${name===pickerCategory?'active':''}" data-cat="${name}">
+      <span>${name}</span><span class="cat-count">${count}</span>
+    </button>`;
+  }).join('');
+  $('pickerCategories').querySelectorAll('.picker-cat').forEach(b=>{
+    b.onclick=()=>{pickerCategory=b.dataset.cat;renderPicker()};
+  });
+}
+function renderPicker(){
+  pickerCategories();
+  const list=(pickerType==='item'?Items:Units).filter(x=>!x.hidden);
+  const q=pickerSearchTerm.trim().toLowerCase();
+  const filtered=list.filter(x=>{
+    const searchOk=!q||String(x.name).toLowerCase().includes(q);
+    let catOk=true;
+    if(pickerCategory==='High Value'||pickerCategory==='Okay Value'||pickerCategory==='Low Value')catOk=pickerTier(x)===pickerCategory;
+    else if(pickerCategory==='Rising'||pickerCategory==='Stable'||pickerCategory==='Falling')catOk=pickerTrend(x)===pickerCategory;
+    return searchOk&&catOk;
+  });
+  $('pickerGrid').innerHTML='';
+  if(!filtered.length){
+    $('pickerGrid').innerHTML='<div class="picker-empty">No matching towers found.</div>';
+    return;
+  }
+  filtered.forEach(u=>{
+    const tier=pickerTier(u), trend=pickerTrend(u);
+    const c=document.createElement('button');
+    c.type='button';c.className='picker-card';
+    c.innerHTML=`
+      <div class="picker-image-wrap">
+        <img src="${imgSrc(u)}" alt="${u.name}">
+        <span class="picker-tier">${tier}</span>
+        <span class="picker-trend trend-${trend.toLowerCase()}" title="${trend}">${pickerTrendIcon(trend)}</span>
+      </div>
+      <div class="picker-card-name">${u.name}</div>
+      <div class="picker-card-meta">
+        <span class="picker-card-value">Value: ${pickerDisplayValue(u)}</span>
+        <span class="picker-card-demand">${u.demand!=null?'D '+u.demand+'/10':''}</span>
+      </div>`;
+    safe(c.querySelector('img'));
+    // IMPORTANT: quantity settings are opened only after clicking a single tower card.
+    c.onclick=()=>openQuantity(u);
+    $('pickerGrid').append(c);
+  });
+}
+function setPickerType(type){
+  pickerType=type;
+  pickerCategory='All';
+  pickerSearchTerm='';
+  $('pickerSearch').value='';
+  $('towerSource').classList.toggle('active',type==='tower');
+  $('itemSource').classList.toggle('active',type==='item');
+  renderPicker();
+}
+function openModal(s){
+  side=s;
+  pickerType='tower';
+  pickerCategory='All';
+  pickerSearchTerm='';
+  selectedTradeUnit=null;
+  $('pickerSearch').value='';
+  $('browseView').classList.remove('hide');
+  $('quantityView').classList.remove('show');
+  $('towerSource').classList.add('active');
+  $('itemSource').classList.remove('active');
+  renderPicker();
+  $('modal').classList.add('show');
+}
+function closeAddModal(){
+  $('modal').classList.remove('show');
+  selectedTradeUnit=null;
+}
+function openQuantity(u){
+  selectedTradeUnit=u;
+  $('browseView').classList.add('hide');
+  $('quantityView').classList.add('show');
+  const im=$('selectedImg');
+  im.src=imgSrc(u);im.alt=u.name;safe(im);
+  $('selectedName').textContent=u.name;
+  $('selectedRarity').textContent=`${pickerTier(u)} • ${pickerTrend(u)}`;
+  $('selectedValue').textContent=pickerDisplayValue(u);
+  $('amt').value='1';
+  $('quantitySlider').value='1';
+  $('variant').innerHTML='';
+  $('variant').style.display='block';
+  if(pickerType==='tower'){
+    $('variantLabel').style.display='block';
+    modes(u).forEach(m=>{
+      const o=document.createElement('option');
+      o.value=m;o.textContent=variants[m].name;
+      $('variant').append(o);
+    });
+  }else{
+    $('variantLabel').style.display='none';
+    $('variant').style.display='none';
+  }
+}
+function backToBrowse(){
+  selectedTradeUnit=null;
+  $('quantityView').classList.remove('show');
+  $('browseView').classList.remove('hide');
+}
+function addEntry(){
+  const u=selectedTradeUnit;
+  if(!u)return;
+  const amount=Math.max(1,Math.min(999999,Math.floor(Number($('amt').value)||1)));
+  const item=pickerType==='item';
+  const m=item?'normal':$('variant').value;
+  let rawValue=(m==='normal'&&u.valueNote)?pickerValue(u):Number(u[variants[m].key]);
+  if(!Number.isFinite(rawValue)||rawValue<0)rawValue=pickerValue(u);
+  const val=rawValue*amount;
+
+  const e=document.createElement('div');
+  e.className='entry';
+  const im=document.createElement('img');
+  im.src=imgSrc(u);safe(im);e.append(im);
+
+  if(!item&&m!=='normal'){
+    const o=document.createElement('div');
+    o.className='overlay';o.textContent=variants[m].name;o.dataset.x=1;e.append(o);
+  }
+
+  const info=document.createElement('div');
+  info.innerHTML=`<b>${u.name} x${amount}</b><div class="muted">${item?'Item':'Stability: '+(u.stability||'Unknown')}</div>`;
+  e.append(info);
+
+  const v=document.createElement('span');
+  v.className='val';v.textContent=val.toFixed(2);e.append(v);
+  e.onclick=()=>{e.remove();totals()};
+  document.querySelector('#'+side+' .list').append(e);
+  closeAddModal();
+  totals();
+}
+$('pickerSearch').addEventListener('input',e=>{pickerSearchTerm=e.target.value;renderPicker()});
+$('towerSource').onclick=()=>setPickerType('tower');
+$('itemSource').onclick=()=>setPickerType('item');
+$('pickerClose').onclick=closeAddModal;
+$('quantityClose').onclick=closeAddModal;
+$('quantityCancel').onclick=backToBrowse;
+$('quantityBack').onclick=backToBrowse;
+$('quantityAdd').onclick=addEntry;
+$('quantityForm').addEventListener('submit',e=>{e.preventDefault();addEntry()});
+$('quantitySlider').addEventListener('input',e=>{
+  $('amt').value=e.target.value;
+});
+$('amt').addEventListener('input',e=>{
+  let n=Math.max(1,Math.min(999999,Math.floor(Number(e.target.value)||1)));
+  e.target.value=n;
+  $('quantitySlider').value=Math.min(100,n);
+});
+$('modal').onclick=e=>{if(e.target===e.currentTarget)closeAddModal()};
+$('settings').onclick=e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')}
+function totals(){let sum=s=>[...document.querySelectorAll('#'+s+' .val')].reduce((a,x)=>a+(+x.textContent||0),0),a=sum('you'),b=sum('them');$('yt').textContent=a.toFixed(2);$('tt').textContent=b.toFixed(2);let d=a-b;$('res').textContent=d>=.6?'Lose 💀':d<=-.6?'Win 🤑':'Fair 🤝'}
+function show(id){const section=$(id);if(!section)return;document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));section.classList.add('active');$('discord').classList.toggle('hide',id!=='home')}
+function applyTheme(t){document.body.classList.remove('dark','glass');if(t!=='colorful')document.body.classList.add(t);$('theme').value=t}
+function saveTheme(){let t=$('theme').value||'colorful';try{localStorage.setItem('utd_theme',t)}catch(e){}applyTheme(t);$('settings').classList.remove('show')}
+function openSettings(){let t='colorful';try{t=localStorage.getItem('utd_theme')||'colorful'}catch(e){}$('theme').value=t;$('settings').classList.add('show')}
+let savedTheme='colorful';try{savedTheme=localStorage.getItem('utd_theme')||'colorful'}catch(e){}applyTheme(savedTheme);render();totals();
+</script></body></html>
